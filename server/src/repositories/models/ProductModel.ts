@@ -10,7 +10,7 @@ export const ProductSchema = new Schema<IProduct>(
     },
     description: {
       type: String,
-      // required: true,
+      required: true,
       unique: true,
     },
     store: {
