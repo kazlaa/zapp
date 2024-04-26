@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from "../hooks/AppContext";
-import "../styles/Product.css"; // Import the CSS file for styling
+import "../styles/Product.css";
 import { ToastContainer } from 'react-toastify';
 
 export const Product = () => {

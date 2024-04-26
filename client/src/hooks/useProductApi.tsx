@@ -64,6 +64,7 @@ export const useProductApi = (): IProductApi => {
   const saveSelectedProduct = async () => {
     try {
       if (!selectedProduct?.sku) throw new Error("sku is mandatory and mus be unique");
+      toast.info('Saving product');
       setIsLoadingProduct(true);
       const response = await fetch(
         `${API_URL}/product/${selectedProduct?.sku}`,
@@ -89,6 +90,7 @@ export const useProductApi = (): IProductApi => {
   const addProduct = async () => {
     try {
       if (!selectedProduct?.sku) throw new Error("sku is mandatory and must be unique");
+      toast.info('Saving product');
       setIsLoadingProduct(true);
       const response = await fetch(`${API_URL}/product`, {
         method: "POST",

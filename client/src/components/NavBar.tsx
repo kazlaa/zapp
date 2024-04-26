@@ -12,7 +12,6 @@ export const NavBar = () => {
         <li className="navbar-item">
           <Link to="/upload" className="navbar-link">Upload</Link>
         </li>
-        {/* Add more navigation links as needed */}
       </ul>
     </nav>
   );

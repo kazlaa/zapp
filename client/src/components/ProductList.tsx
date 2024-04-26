@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { useAppContext } from "../hooks/AppContext";
 import { IProduct } from "../types/product";
 import "../styles/ProductsList.css";
-import { ToastContainer } from "react-toastify";
 
 export const ProductsList: React.FC = () => {
   const { productApi } = useAppContext();
