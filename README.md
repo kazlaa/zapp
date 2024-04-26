@@ -9,6 +9,11 @@
 
 ## How to run
 
+The 3 main element to run the application are in 3 folders at the root of the repository:
+ - client
+ - server
+ - datastore
+
 ### Database
 I used Mongo DB for this test which run in a docker container. To run the container :
  ```
