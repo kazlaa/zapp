@@ -2,6 +2,7 @@ import { Model, ProjectionType } from "mongoose";
 import { getProductModel } from "./models/ProductModel";
 import { IPaginatedProducts, IProductRepository } from "./IProductRepository";
 import { IProduct } from "src/interfaces";
+import { NotfoundError } from "../helpers/error";
 
 class ProductRepository implements IProductRepository {
   private defaultProjection = {
@@ -50,7 +51,7 @@ class ProductRepository implements IProductRepository {
       .findOne(query, this.defaultProjection)
       .lean();
     if (!product) {
-      throw new Error("Product not found");
+      throw new NotfoundError(`Product not found. query: ${JSON.stringify(query)}`);
     }
     return product;
   }

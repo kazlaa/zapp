@@ -4,6 +4,7 @@ import { ProductsList } from "./components/ProductList";
 import { ProductUploadForm } from "./components/ProductUploadForm";
 import { Product } from "./components/Product";
 import { NavBar } from "./components/NavBar";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (

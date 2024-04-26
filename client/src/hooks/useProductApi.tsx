@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IProduct, IProductApi } from "../types/product";
 import { config } from "../config";
+import { toast } from "react-toastify";
 
 export const useProductApi = (): IProductApi => {
   const [isLoadingProduct, setIsLoadingProduct] = useState<boolean>(false);
@@ -14,31 +15,38 @@ export const useProductApi = (): IProductApi => {
 
   const fetchProducts = async (pageNumber: number) => {
     try {
-      setIsLoadingProduct((prev) => !prev);
+      setIsLoadingProduct(true);
       const response = await fetch(
         `${API_URL}/products/?offset=${
           (pageNumber - 1) * 5
         }&limit=${PRODUCTS_PER_PAGE}`
       );
       const data = await response.json();
-      console.log(JSON.stringify(data));
+
       setProducts(data.products);
       setProductCount(data.count);
       setTotalPages(Math.ceil(data.count / PRODUCTS_PER_PAGE));
-      setIsLoadingProduct((prev) => !prev);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      setIsLoadingProduct((prev) => !prev);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoadingProduct(false);
     }
   };
 
   const fetchProductBySku = async (sku: string) => {
     try {
+      setIsLoadingProduct(true);
       const response = await fetch(`${API_URL}/product/${sku}`);
+      if (response.status !== 200) {
+        const responseText = await response.text();
+        throw new Error(responseText);
+      }
       const data = await response.json();
       setSelectedProduct(data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoadingProduct(false);
     }
   };
 
@@ -55,47 +63,67 @@ export const useProductApi = (): IProductApi => {
 
   const saveSelectedProduct = async () => {
     try {
-      if(!selectedProduct?.sku) throw new Error('Nothing to save')
-      await fetch(`${API_URL}/product/${selectedProduct?.sku}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(selectedProduct),
-      });
-      updateLocalProducts(selectedProduct)
-    } catch {
-      console.log("Update failed");
+      if (!selectedProduct?.sku) throw new Error("sku is mandatory and mus be unique");
+      setIsLoadingProduct(true);
+      const response = await fetch(
+        `${API_URL}/product/${selectedProduct?.sku}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(selectedProduct),
+        }
+      );
+      if (response.status !== 200) {
+        throw new Error(await response.text());
+      }
+      updateLocalProducts(selectedProduct);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoadingProduct(false);
     }
   };
 
   const addProduct = async () => {
     try {
-      if(!selectedProduct?.sku) throw new Error('Nothing to save')
-      await fetch(`${API_URL}/product`, {
+      if (!selectedProduct?.sku) throw new Error("sku is mandatory and must be unique");
+      setIsLoadingProduct(true);
+      const response = await fetch(`${API_URL}/product`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(selectedProduct),
       });
-
-    } catch {
-      console.log("Update failed");
+      if (response.status !== 200) {
+        throw new Error(await response.text());
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoadingProduct(false);
     }
   };
 
   const deleteProduct = async (sku: string) => {
     try {
-      await fetch(`${API_URL}/product/${sku}`, {
+      const response = await fetch(`${API_URL}/product/${sku}`, {
         method: "DELETE",
       });
 
       setProducts((prev) => prev.filter((p) => p.sku !== sku));
       setProductCount((prev) => prev - 1);
       setTotalPages(Math.ceil(productCount / PRODUCTS_PER_PAGE));
+
+      if (response.status !== 200) {
+        throw new Error(await response.text());
+      }
     } catch {
-      console.log("delete failed");
+      toast.error("delete failed");
+    } finally {
+      setIsLoadingProduct(false);
     }
   };
 

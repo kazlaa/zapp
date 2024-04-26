@@ -7,7 +7,6 @@ import cors from 'cors';
 
 dotenv.config({ path: path.join(__dirname, '../.env') });
 import { handleError } from './helpers/error';
-import httpLogger from './middlewares/httpLogger';
 import router from './routes/index';
 import { connectDb, disconnectDb } from './db/db';
 
@@ -15,7 +14,6 @@ connectDb('mongodb://localhost:27017', '', '');
 
 const app: express.Application = express();
 
-app.use(httpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
