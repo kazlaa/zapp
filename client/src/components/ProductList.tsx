@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../hooks/AppContext";
 import { IProduct } from "../types/product";
+import "../styles/ProductsList.css"; // Import the CSS file for styling
 
 export const ProductsList: React.FC = () => {
   const { productApi } = useAppContext();
@@ -35,10 +36,30 @@ export const ProductsList: React.FC = () => {
     deleteProduct(product.sku);
   };
 
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handleFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  const handleLastPage = () => {
+    setCurrentPage(totalPages);
+  };
+
   return (
-    <div>
+    <div className="products-list-container">
       <h2>Products List</h2>
-      <table>
+      <table className="products-table">
         <thead>
           <tr>
             <th>SKU</th>
@@ -57,25 +78,27 @@ export const ProductsList: React.FC = () => {
               <td>{product.quantity}</td>
               <td>{product.store}</td>
               <td>
-                <button onClick={() => handleEditClick(product)}>Edit</button>
+                <button className="edit-btn" onClick={() => handleEditClick(product)}>Edit</button>
               </td>
               <td>
-                <button onClick={() => handleDeleteClick(product)}>
-                  Delete
-                </button>
+                <button className="delete-btn" onClick={() => handleDeleteClick(product)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div>
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+      <div className="pagination-container">
+        <button className="pagination-btn" onClick={handleFirstPage}>First</button>
+        <button className="pagination-btn" onClick={handlePreviousPage}>Previous</button>
+        {Array.from({ length: Math.min(totalPages, 5) }, (_, index) => index + 1).map(
           (page) => (
-            <button key={page} onClick={() => handlePaginationClick(page)}>
+            <button key={page} className={`pagination-btn ${currentPage === page ? 'active' : ''}`} onClick={() => handlePaginationClick(page)}>
               {page}
             </button>
           )
         )}
+        <button className="pagination-btn" onClick={handleNextPage}>Next</button>
+        <button className="pagination-btn" onClick={handleLastPage}>Last</button>
       </div>
     </div>
   );

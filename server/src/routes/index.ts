@@ -7,7 +7,7 @@ import { productRepository } from "../repositories/ProductRepository";
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
-router.post("/upload", upload.single("product"), (req, res) => {
+router.post("/upload", upload.single("products"), (req, res) => {
 
   if (!req.file) {
     return res.status(400).send("No file uploaded.");

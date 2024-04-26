@@ -1,8 +1,10 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import { config } from "../config";
 
+const { API_URL } = config;
 export const ProductUploadForm: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [uploadStatus, setUploadStatus] = useState<string>('');
+  const [uploadStatus, setUploadStatus] = useState<string>("");
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -13,27 +15,27 @@ export const ProductUploadForm: React.FC = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!file) {
-      alert('Please select a file to upload.');
+      alert("Please select a file to upload.");
       return;
     }
 
     const formData = new FormData();
-    formData.append('products', file);
+    formData.append("products", file);
 
     try {
-      const response = await fetch('YOUR_BACKEND_UPLOAD_ENDPOINT', {
-        method: 'POST',
+      const response = await fetch(`${API_URL}/upload/`, {
+        method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        setUploadStatus('File uploaded successfully!');
+        setUploadStatus("File uploaded successfully!");
       } else {
-        setUploadStatus('Upload failed. Please try again.');
+        setUploadStatus("Upload failed. Please try again.");
       }
     } catch (error) {
-      console.error('Error uploading file:', error);
-      setUploadStatus('Upload failed. Please try again.');
+      console.error("Error uploading file:", error);
+      setUploadStatus("Upload failed. Please try again.");
     }
   };
 
