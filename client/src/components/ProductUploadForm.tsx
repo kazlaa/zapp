@@ -34,7 +34,7 @@ export const ProductUploadForm: React.FC = () => {
       }
       const data = await response.json();
       if (data.failedProducts.length) {
-        toast.warning("Some products were not saved, check logs");
+        toast.warning("Some products were not saved, check the logs");
       } else {
         toast.info("Your csv file uploaded successfully");
       }
