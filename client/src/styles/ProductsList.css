@@ -55,3 +55,17 @@
 .active {
   background-color: #005A7B;
 }
+
+.new-product-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  margin: 10px 0px;
+  cursor: pointer;
+}
+
+.new-product-btn:hover {
+  background-color: #0056b3;
+}

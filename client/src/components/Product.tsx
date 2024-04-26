@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from "../hooks/AppContext";
+import "../styles/Product.css"; // Import the CSS file for styling
 
 export const Product = () => {
   const { productApi } = useAppContext();
   const params = useParams();
-  
-  const { selectedProduct, setSelectedProduct, saveSelectedProduct, fetchProductBySku } = productApi;
+  const { selectedProduct, setSelectedProduct, saveSelectedProduct, fetchProductBySku, addProduct } = productApi;
 
+  const editMode: boolean = params.sku !== 'add'; 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,7 +19,7 @@ export const Product = () => {
   };
 
   const handleSaveClick = () => {
-    saveSelectedProduct();
+    editMode? saveSelectedProduct(): addProduct();
   };
 
   useEffect(() => {
@@ -26,42 +27,45 @@ export const Product = () => {
       await fetchProductBySku(sku);
     }
 
-    !selectedProduct && params.sku && fetch(params.sku);
-  },[params.sku])
+    if(editMode) {
+      !selectedProduct && params.sku && fetch(params.sku);
+    } else {
+      setSelectedProduct({ sku: '', description: '', store: '', quantity: 0})
+    }
+  }, [params.sku])
 
-  if(!selectedProduct) {
+  if (!selectedProduct) {
     return <div>
-      <p>looking for your product</p>
+      <p>Looking for your product...</p>
     </div>
   }
 
   return (
-    <div>
+    <div className="product-container">
       <h3>Product</h3>
-        <div>
-          <label>
-            SKU:
-            <input type="text" name="sku" value={selectedProduct?.sku} onChange={handleInputChange} readOnly/>
-          </label>
-          <br />
-          <label>
-            Description:
-            <input type="text" name="description" value={selectedProduct?.description} onChange={handleInputChange} />
-          </label>
-          <br />
-          <label>
-            Quantity:
-            <input type="number" name="quantity" value={selectedProduct?.quantity.toString()} onChange={handleInputChange} />
-          </label>
-          <br />
-          <label>
-            Store:
-            <input type="text" name="store" value={selectedProduct?.store} onChange={handleInputChange} />
-          </label>
-          <br />
-          <button onClick={handleSaveClick}>Save</button>
-        </div>
-
+      <div className="form-container">
+        <label>
+          SKU:
+          <input type="text" name="sku" value={selectedProduct?.sku} onChange={handleInputChange} readOnly={editMode} />
+        </label>
+        <br />
+        <label>
+          Description:
+          <input type="text" name="description" value={selectedProduct?.description} onChange={handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Quantity:
+          <input type="number" name="quantity" value={selectedProduct?.quantity.toString()} onChange={handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Store:
+          <input type="text" name="store" value={selectedProduct?.store} onChange={handleInputChange} />
+        </label>
+        <br />
+        <button className="save-btn" onClick={handleSaveClick}>Save</button>
+      </div>
     </div>
   );
 };

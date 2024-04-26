@@ -15,5 +15,6 @@ export interface IProductApi {
   fetchProducts: (page: number) => void;
   fetchProductBySku: (sku: string) => void;
   saveSelectedProduct: () => void;
+  addProduct: () => void;
   deleteProduct: (sku: string) => void;
 }

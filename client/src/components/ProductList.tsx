@@ -56,9 +56,14 @@ export const ProductsList: React.FC = () => {
     setCurrentPage(totalPages);
   };
 
+  const handleNewProductClick = () => {
+    navigate("/product/add");
+  };
+
   return (
     <div className="products-list-container">
       <h2>Products List</h2>
+      <button className="new-product-btn" onClick={handleNewProductClick}>New Product</button>
       <table className="products-table">
         <thead>
           <tr>

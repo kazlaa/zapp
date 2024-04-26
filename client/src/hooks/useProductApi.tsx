@@ -69,6 +69,22 @@ export const useProductApi = (): IProductApi => {
     }
   };
 
+  const addProduct = async () => {
+    try {
+      if(!selectedProduct?.sku) throw new Error('Nothing to save')
+      await fetch(`${API_URL}/product`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedProduct),
+      });
+
+    } catch {
+      console.log("Update failed");
+    }
+  };
+
   const deleteProduct = async (sku: string) => {
     try {
       await fetch(`${API_URL}/product/${sku}`, {
@@ -94,5 +110,6 @@ export const useProductApi = (): IProductApi => {
     fetchProductBySku,
     saveSelectedProduct,
     deleteProduct,
+    addProduct,
   };
 };

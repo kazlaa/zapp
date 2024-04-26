@@ -27,6 +27,19 @@ router.post("/upload", upload.single("products"), (req, res) => {
     });
 });
 
+router.post('/product', async (req, res) => {
+  const newProduct = req.body;
+
+  try {
+    const newlyAddedProduct = await productRepository.create(newProduct);
+
+    res.json(newlyAddedProduct);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 router.get("/products", async (req, res) => {
   const { offset, limit } = req.query;
 
