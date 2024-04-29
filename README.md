@@ -6,6 +6,7 @@
  - React
  - Mongo
  - Docker
+ - (Node v18)
 
 ## How to run
 
