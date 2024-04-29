@@ -58,3 +58,9 @@ I used Client - Server approach where I created a Rest API. The rest API handle 
  The UI can requests to these endpoint so that the user can add/edit/delete any product added.
 
  The API appropriate http status and with error message, when applicable, so that the UI can display
+
+## Assumption
+
+ - Sku are unique and products unique identifier
+ - All fields are mandatory (I didn't validate on max length though)
+ - Not design for mobile
